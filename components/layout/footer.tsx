@@ -293,6 +293,16 @@ export function Footer() {
 
         {/* Bottom Legal Panel */}
         <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[10px] font-secondary uppercase tracking-widest text-muted-foreground border-t border-border/40">
+
+                {/* Made in India with Love Row */}
+              <div className="flex items-center gap-2 text-[11px] tracking-normal font-body">
+                <span className="text-foreground/80 font-medium">Made in India</span>
+                <span className="text-primary/60">🇮🇳</span>
+                <span className="text-muted-foreground/40">with</span>
+                <span className="text-red-500 animate-pulse text-sm">❤️</span>
+              </div>
+
+
           <div className="flex flex-col md:flex-row items-center gap-2 text-center md:text-left">
             <span>© 2026 Atlascub Premium Apparel.</span>
             <span className="hidden md:inline">•</span>

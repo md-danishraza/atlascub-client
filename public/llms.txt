@@ -1,0 +1,19 @@
+# Atlascub
+
+Translating classic Indian handloom textures and premium combed cottons into timeless, modern silhouettes. Designed for generation-spanning daily wear and optimized as a high-performance progressive web application (PWA).
+
+## Core Store Navigation
+- [Homepage](https://www.atlascub.in/) - Main branding showcase, cinematic lookbooks, and featured curated items.
+- [Shop Catalog](https://www.atlascub.in/shop) - Full retail directory sorted by modern silhouettes and lifestyle fits.
+- [Collections](https://www.atlascub.in/collections/all) - Special seasonal editions, limited capsule drops, and custom drapes.
+
+## Support & Identity Information
+- [About Us](https://www.atlascub.in/about) - The Atlascub Studio private limited design philosophy, sourcing metrics, and story.
+- [Help Center & Support](https://www.atlascub.in/support) - Customer care terminal for orders, sizing charts, and standard assistance.
+- [Contact Channels](https://www.atlascub.in/contact) - Digital PR inquiries, customer care routes, and direct support.
+
+## Legal & Compliance Operations
+- [Privacy Policy](https://www.atlascub.in/privacy) - System data compliance schemas and encryption outlines.
+- [Terms of Service](https://www.atlascub.in/terms) - Standard terms of transaction, application usage, and site guidelines.
+- [Returns & Exchanges](https://www.atlascub.in/returns) - Protocol matrices for item validation, processing windows, and collection steps.
+- [Shipping Policy](https://www.atlascub.in/shipping-policy) - Delivery processing limits, domestic logistics coverage, and tax values.
