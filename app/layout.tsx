@@ -61,7 +61,7 @@ export const viewport: Viewport = {
       default: "Atlascub | Premium Modern Clothing & Drapes",
       template: "%s | Atlascub",
     },
-    description: "Discover curated apparel at Atlascub. Premium quality, timeless design, and modern Indian tailoring.",
+    description: "Discover curated luxury apparel at Atlascub. Elevate your wardrobe with premium linen shirts, oversized silhouettes, and minimalist modern Indian tailoring.",
     keywords: [
       "premium clothing", 
       "Indian fashion", 
@@ -86,7 +86,7 @@ export const viewport: Viewport = {
       description: "Discover curated apparel at Atlascub. Premium quality, timeless design, and modern tailoring.",
       images: [
         {
-          url: "/og-image.png",
+          url: "https://www.atlascub.in/og-image.png",
           width: 1200,
           height: 630,
           alt: "Atlascub Premium Clothing",
@@ -99,7 +99,7 @@ export const viewport: Viewport = {
       title: "Atlascub | Premium Modern Clothing",
       description: "Discover curated apparel at Atlascub. Premium quality, timeless design.",
       creator: "@atlascub",
-      images: ["/og-image.png"],
+      images: ["https://www.atlascub.in/og-image.png"],
     },
   
     appleWebApp: {
