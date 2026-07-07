@@ -6,13 +6,13 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { CartSidebar } from "@/components/cart/cart-sidebar";
 import { WishlistSidebar } from "@/components/wishlist/wishlist-sidebar";
 import { AnnouncementBar } from "@/components/shared/announcement-bar";
 import { WhatsappWidget } from "@/components/home/whats-app-widget";
 import { Toaster } from "sonner";
-import { AuthStatus } from "@/components/debug/token-debug";
+// import { SmoothCursor } from "@/components/ui/smooth-cursor";
+// import { AuthStatus } from "@/components/debug/token-debug";
 
 import { Providers } from "@/components/providers/global-provider";
 import { Chatbot } from "@/components/rag/chatbot";
@@ -147,7 +147,7 @@ export default function RootLayout({
          
          {/* All strictly client-side providers (Redux, Theme, Sync) are injected here */}
          <Providers>
-           <SmoothCursor />
+           {/* <SmoothCursor /> */}
            <div className="relative flex min-h-screen flex-col">
              <AnnouncementBar />
              <Navbar />

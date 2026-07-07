@@ -20,7 +20,6 @@ export default function AccountOrderDetailPage() {
   const router = useRouter();
   const id = params.id as string;
 
-  // 🛡️ Live API Hooks
   const { data: order, isLoading, isError, isFetching, refetch } = useGetOrderByIdQuery(id);
   const [initiateReturn, { isLoading: isSubmittingReturn }] = useInitiateReturnMutation();
   
@@ -42,7 +41,6 @@ export default function AccountOrderDetailPage() {
     );
   }
 
- 
   if (isError || !order) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -63,7 +61,6 @@ export default function AccountOrderDetailPage() {
     );
   }
 
-  // 🛡️ Logic to calculate if the order is within the 7-day return window
   const deliveredDate = new Date(order.updatedAt);
   const daysSinceDelivery = (Date.now() - deliveredDate.getTime()) / (1000 * 3600 * 24);
   const isReturnEligible = order.status === "DELIVERED" && daysSinceDelivery <= 7 && !order.returnStatus;
@@ -78,7 +75,7 @@ export default function AccountOrderDetailPage() {
       
       toast.success("Return request submitted successfully");
       setShowReturnModal(false);
-      refetch(); // Reload data to show updated status
+      refetch();
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to submit return request");
     }
@@ -93,13 +90,11 @@ export default function AccountOrderDetailPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-3xl animate-in fade-in duration-500">
-       {/* ✅ Back Button + Refresh Button */}
-       <div className="flex items-center justify-between mb-6">
-       <Button variant="ghost" onClick={() => router.push("/account/orders")} className="mb-6">
-        <ArrowLeft className="h-4 w-4 mr-2" /> Back to Orders
-      </Button>
+      <div className="flex items-center justify-between mb-6">
+        <Button variant="ghost" onClick={() => router.push("/account/orders")}>
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Orders
+        </Button>
         
-        {/* ✅ Refresh Button */}
         <Button
           variant="outline"
           size="icon"
@@ -112,9 +107,6 @@ export default function AccountOrderDetailPage() {
         </Button>
       </div>
 
-    
-
-      {/* 🛡️ FIXED Dynamic Status / Return Banner */}
       {order.returnStatus && (
         <div className={`mb-6 rounded-lg border p-4 sm:p-5 flex items-start gap-3 shadow-sm ${
           order.status === 'REFUNDED' || order.status === 'REPLACED' 
@@ -130,7 +122,7 @@ export default function AccountOrderDetailPage() {
           ) : (
             <RotateCcw className="h-5 w-5 mt-0.5 shrink-0" />
           )}
-          <div className="flex-1">
+          <div className="flex-1 text-left">
             <h3 className="font-semibold text-base">
               {order.status === 'REFUNDED' && "Refund Successfully Processed"}
               {order.status === 'REPLACED' && "Replacement Completed"}
@@ -149,13 +141,11 @@ export default function AccountOrderDetailPage() {
         </div>
       )}
 
-      {/* Order Header & Return Trigger */}
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
+        <div className="text-left">
           <h1 className="heading-lg font-primary">Order #{order.orderNumber}</h1>
           <div className="flex flex-wrap items-center gap-3 mt-1">
-            {/* 🛡️ FIXED: Always use the raw order.status so the backend state drives the UI */}
-            <OrderStatusBadge status={order.status as any} size="lg" />
+            <OrderStatusBadge status={order.status} size="lg" />
             <span className="text-sm text-muted-foreground flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
               {orderDate} at {orderTime}
@@ -163,7 +153,6 @@ export default function AccountOrderDetailPage() {
           </div>
         </div>
         
-        {/* The Action Button */}
         {isReturnEligible && (
           <Button 
             variant="outline" 
@@ -178,7 +167,7 @@ export default function AccountOrderDetailPage() {
       {order.status === "PENDING" ? (
         <div className="mb-6 rounded-lg border border-destructive/20 bg-destructive/5 p-5 text-destructive flex items-start gap-3 shadow-sm">
           <AlertCircle className="h-5 w-5 mt-0.5 shrink-0" />
-          <div>
+          <div className="text-left">
             <h3 className="font-semibold text-base">Payment Incomplete</h3>
             <p className="text-sm opacity-90 mt-1 leading-relaxed">
               The payment for this order was not completed or failed. For security reasons, a new transaction session cannot be restarted for this specific reference. 
@@ -189,17 +178,18 @@ export default function AccountOrderDetailPage() {
         </div>
       ) : (
         <Card className="mb-6">
-          <CardHeader><CardTitle className="text-base">Order Timeline</CardTitle></CardHeader>
-          {/* 🛡️ FIXED: Let the timeline naturally react to REFUND_PROCESSING / REFUNDED */}
-          <CardContent><OrderTimeline status={order.status as any} /></CardContent>
+          <CardHeader className="text-left"><CardTitle className="text-base">Order Timeline</CardTitle></CardHeader>
+          <CardContent>
+            {/* 🛡️ DECOUPLED TIMELINE INTEGRATION (Uses both status and paymentMethod props) */}
+            <OrderTimeline status={order.status as any} paymentMethod={order.paymentMethod} />
+          </CardContent>
         </Card>
       )}
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Shipping Address */}
         <Card>
-          <CardHeader><CardTitle className="flex items-center gap-2 text-base"><MapPin className="h-4 w-4" /> Shipping Address</CardTitle></CardHeader>
-          <CardContent className="space-y-1 text-sm">
+          <CardHeader className="text-left"><CardTitle className="flex items-center gap-2 text-base"><MapPin className="h-4 w-4" /> Shipping Address</CardTitle></CardHeader>
+          <CardContent className="space-y-1 text-sm text-left">
             <p className="font-medium">{order.shippingAddress.firstName} {order.shippingAddress.lastName}</p>
             <p className="text-muted-foreground">{order.shippingAddress.email}</p>
             <p className="text-muted-foreground">{order.shippingAddress.phone}</p>
@@ -211,9 +201,8 @@ export default function AccountOrderDetailPage() {
           </CardContent>
         </Card>
 
-        {/* Order Summary */}
         <Card>
-          <CardHeader><CardTitle className="flex items-center gap-2 text-base"><Receipt className="h-4 w-4" /> Order Summary</CardTitle></CardHeader>
+          <CardHeader className="text-left"><CardTitle className="flex items-center gap-2 text-base"><Receipt className="h-4 w-4" /> Order Summary</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -251,16 +240,15 @@ export default function AccountOrderDetailPage() {
         </Card>
       </div>
 
-      {/* Shiprocket Tracking Section */}
       {(order.awbCode || order.trackingNumber) && (
         <Card className="mt-6 border-primary/20 bg-primary/5">
-          <CardHeader>
+          <CardHeader className="text-left">
             <CardTitle className="flex items-center gap-2 text-base">
               <Truck className="h-4 w-4 text-primary" /> Shipment Tracking
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-left">
               <div className="flex-1 space-y-3">
                 {order.awbCode && (
                   <div>
@@ -298,15 +286,14 @@ export default function AccountOrderDetailPage() {
         </Card>
       )}
 
-      {/* Order Items */}
       <Card className="mt-6">
-        <CardHeader>
+        <CardHeader className="text-left">
           <CardTitle className="flex items-center gap-2 text-base">
             <Package className="h-4 w-4" /> Order Items ({order.items.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-4 text-left">
             {order.items.map((item: any, index: number) => (
               <div key={index} className="flex items-start justify-between border-b border-border pb-3 last:border-0 last:pb-0">
                 <div className="flex-1">

@@ -8,11 +8,13 @@ import {
   AlertCircle,
   RefreshCw,
   Banknote,
+  ThumbsUp,
 } from "lucide-react";
 
-// Status type definition (Expanded for Returns/Refunds)
 export type OrderStatusType =
   | "PENDING"
+  | "COD_REQUESTED"
+  | "CONFIRMED"
   | "PAID"
   | "SHIPPED"
   | "DELIVERED"
@@ -24,22 +26,21 @@ export type OrderStatusType =
   | "REPLACEMENT_PROCESSING"
   | "REPLACED";
 
-// Status configuration
 export interface OrderStatusConfig {
   label: string;
   color: {
-    badge: string; // Background color for badge
-    text: string; // Text color
-    border: string; // Border color
-    light: string; // Light background for cards
-    dark: string; // Dark background for dark mode
+    badge: string;
+    text: string;
+    border: string;
+    light: string;
+    dark: string;
   };
   icon: React.ElementType;
   timeline: {
-    step: number; // Order in the timeline (1-5)
-    label: string; // Display label for timeline
+    step: number;
+    label: string;
   };
-  nextStatuses?: OrderStatusType[]; // Allowed next statuses
+  nextStatuses?: OrderStatusType[];
 }
 
 export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
@@ -56,6 +57,36 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     icon: Clock,
     timeline: { step: 1, label: "Order Placed" },
     nextStatuses: ["PAID", "CANCELLED"],
+  },
+
+  COD_REQUESTED: {
+    label: "COD Pending Verification",
+    color: {
+      badge:
+        "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
+      text: "text-amber-600 dark:text-amber-400",
+      border: "border-amber-200 dark:border-amber-800",
+      light: "bg-amber-50 dark:bg-amber-950/20",
+      dark: "bg-amber-900/30",
+    },
+    icon: Clock,
+    timeline: { step: 1, label: "COD Requested" },
+    nextStatuses: ["CONFIRMED", "CANCELLED"],
+  },
+
+  CONFIRMED: {
+    label: "Confirmed (COD)",
+    color: {
+      badge:
+        "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
+      text: "text-emerald-600 dark:text-emerald-400",
+      border: "border-emerald-200 dark:border-emerald-800",
+      light: "bg-emerald-50 dark:bg-emerald-950/20",
+      dark: "bg-emerald-900/30",
+    },
+    icon: ThumbsUp,
+    timeline: { step: 2, label: "Order Confirmed" },
+    nextStatuses: ["SHIPPED", "CANCELLED"],
   },
 
   PAID: {
@@ -117,7 +148,6 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     timeline: { step: 0, label: "Order Cancelled" },
   },
 
-  // --- REFUND FLOW ---
   RETURN_REQUESTED: {
     label: "Return Requested",
     color: {
@@ -132,6 +162,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     timeline: { step: 5, label: "Return Requested" },
     nextStatuses: ["REFUND_PROCESSING"],
   },
+
   REFUND_PROCESSING: {
     label: "Processing Refund",
     color: {
@@ -146,6 +177,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     timeline: { step: 6, label: "Processing Refund" },
     nextStatuses: ["REFUNDED"],
   },
+
   REFUNDED: {
     label: "Refunded",
     color: {
@@ -160,7 +192,6 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     timeline: { step: 7, label: "Refund Complete" },
   },
 
-  // --- REPLACEMENT FLOW ---
   REPLACEMENT_REQUESTED: {
     label: "Replacement Requested",
     color: {
@@ -175,6 +206,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     timeline: { step: 5, label: "Replacement Requested" },
     nextStatuses: ["REPLACEMENT_PROCESSING"],
   },
+
   REPLACEMENT_PROCESSING: {
     label: "Processing Replacement",
     color: {
@@ -189,6 +221,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
     timeline: { step: 6, label: "Dispatching Replacement" },
     nextStatuses: ["REPLACED"],
   },
+
   REPLACED: {
     label: "Replaced",
     color: {
@@ -204,12 +237,10 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatusType, OrderStatusConfig> = {
   },
 };
 
-// Helper: Get status config by status key
 export function getOrderStatus(status: OrderStatusType): OrderStatusConfig {
   return ORDER_STATUS_CONFIG[status] || ORDER_STATUS_CONFIG.PENDING;
 }
 
-// Helper: Get available next statuses for a given status
 export function getNextStatuses(
   currentStatus: OrderStatusType
 ): OrderStatusType[] {
@@ -217,7 +248,6 @@ export function getNextStatuses(
   return config.nextStatuses || [];
 }
 
-// Helper: Get all status options for dropdown (excluding terminal statuses)
 export function getStatusOptionsForAdmin(): Array<{
   value: OrderStatusType;
   label: string;
@@ -234,29 +264,3 @@ export function getStatusOptionsForAdmin(): Array<{
       label: ORDER_STATUS_CONFIG[key].label,
     }));
 }
-
-// Helper: Get status badge color class
-export function getStatusBadgeClass(status: OrderStatusType): string {
-  return getOrderStatus(status).color.badge;
-}
-
-// Helper: Get status text color class
-export function getStatusTextClass(status: OrderStatusType): string {
-  return getOrderStatus(status).color.text;
-}
-
-// Helper: Get status icon
-export function getStatusIcon(status: OrderStatusType): React.ElementType {
-  return getOrderStatus(status).icon;
-}
-
-// Order status timeline steps (Base standard delivery)
-export const ORDER_TIMELINE_STEPS = [
-  { status: "PENDING", label: "Order Placed" },
-  { status: "PAID", label: "Payment Confirmed" },
-  { status: "SHIPPED", label: "Order Shipped" },
-  { status: "DELIVERED", label: "Order Delivered" },
-];
-
-// Status type for API responses
-export type OrderStatus = OrderStatusType;

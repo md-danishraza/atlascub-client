@@ -129,31 +129,35 @@ export default function AccountOrdersPage() {
       </div>
 
     
-      {/* Status Tabs */}
-      <Tabs value={statusFilter} onValueChange={handleStatusChange} className="w-full">
-        <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
-          <TabsList className="inline-flex h-auto w-max gap-2 bg-transparent p-0">
-            {statusTabs.map((tab) => {
-              const count = tab.value === "all" ? globalTotal : statusCounts[tab.value] || 0;
-              return (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  className="flex shrink-0 items-center gap-2 rounded-full border border-border/60 bg-card px-4 py-2 text-sm whitespace-nowrap transition-all hover:bg-muted/50 data-[state=active]:border-primary data-[state=active]:bg-primary/5 data-[state=active]:text-primary data-[state=active]:shadow-sm"
-                >
-                  <tab.icon className="h-4 w-4" />
-                  <span className="font-medium">{tab.label}</span>
-                  {count > 0 && (
-                    <span className="ml-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-muted-foreground data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
-                      {count}
-                    </span>
-                  )}
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-        </div>
-      </Tabs>
+      {/* ✅ FIX: Match admin orders page layout */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+        {statusTabs.map((tab) => {
+          const count = tab.value === "all" ? globalTotal : statusCounts[tab.value] || 0;
+          const isActive = statusFilter === tab.value;
+          
+          return (
+            <button
+              key={tab.value}
+              onClick={() => handleStatusChange(tab.value)}
+              className={`rounded-xl border p-3 text-center transition-all duration-300 ${
+                isActive
+                  ? "border-primary bg-primary/5 shadow-sm scale-[1.02]"
+                  : "border-border/60 bg-card hover:border-primary/30 hover:bg-muted/50"
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 mb-1.5 text-center">
+                <tab.icon className={`h-4 w-4 shrink-0 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
+                <span className={`text-[10px] uppercase tracking-wider font-semibold ${isActive ? "text-primary" : "text-muted-foreground"}`}>
+                  {tab.label}
+                </span>
+              </div>
+              <p className={`text-2xl font-bold font-primary ${isActive ? "text-primary" : "text-foreground"}`}>
+                {count}
+              </p>
+            </button>
+          );
+        })}
+      </div>
 
       {/* Orders List */}
       {orders.length === 0 ? (

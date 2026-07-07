@@ -12,7 +12,8 @@ import {
   Search,
   AlertCircle,
   RefreshCcw,
-  Coins
+  Coins,
+  ThumbsUp
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,13 +21,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/shared/empty-state";
 import { OrderCard } from "@/components/orders/order-card";
-
 import { useGetAllOrdersQuery } from "@/lib/store/apis/checkout-api";
 
-// Status tabs configuration for Administrators
 const statusTabs: { value: string; label: string; icon: React.ElementType }[] = [
   { value: "all", label: "All", icon: Package },
-  { value: "COD_REQUESTED", label: "COD Requests", icon: Coins }, // 🛡️ Added: Admin Verification Queue for COD
+  { value: "COD_REQUESTED", label: "COD Requests", icon: Coins }, 
+  { value: "CONFIRMED", label: "Confirmed (COD)", icon: ThumbsUp }, 
   { value: "PENDING", label: "Prepaid Pending", icon: Clock }, 
   { value: "PAID", label: "Paid", icon: CheckCircle },
   { value: "SHIPPED", label: "Shipped", icon: Truck },
@@ -41,10 +41,8 @@ export default function AdminOrdersPage() {
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  // 1. Unfiltered query for calculating persistent metrics across statuses
   const { data: statsData } = useGetAllOrdersQuery({ limit: 500 });
 
-  // 2. Filtered, paginated query for the table list
   const { data, isLoading, isFetching, isError, refetch } = useGetAllOrdersQuery({
     status: statusFilter !== "all" ? statusFilter : undefined,
     page,
@@ -56,7 +54,6 @@ export default function AdminOrdersPage() {
   const totalPages = data?.totalPages || 0;
   const globalTotal = statsData?.total || 0;
 
-  // Calculate status counts dynamically from statsData
   const statusCounts = (statsData?.data || []).reduce((acc, order) => {
     acc[order.status] = (acc[order.status] || 0) + 1;
     return acc;
@@ -132,7 +129,6 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="heading-md font-primary text-foreground flex items-center gap-3">
@@ -155,7 +151,6 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-      {/* Status Cards */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -189,7 +184,6 @@ export default function AdminOrdersPage() {
         })}
       </motion.div>
 
-      {/* Search Bar */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -200,7 +194,6 @@ export default function AdminOrdersPage() {
         />
       </div>
 
-      {/* Orders List */}
       <Card className="border-border/60 shadow-sm">
         <CardHeader className="border-b border-border/40 bg-muted/20 pb-4">
           <CardTitle className="text-lg font-medium flex items-center gap-2">
@@ -236,7 +229,6 @@ export default function AdminOrdersPage() {
             </div>
           )}
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-8 flex items-center justify-between gap-4 border-t border-border/60 pt-6">
               <p className="text-sm font-medium text-muted-foreground">

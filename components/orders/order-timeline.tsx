@@ -1,11 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, XCircle } from "lucide-react";
-import { ORDER_TIMELINE_STEPS, getOrderStatus, OrderStatusType } from "@/lib/constants/order-status";
+import { 
+  Check, 
+  XCircle, 
+ 
+} from "lucide-react";
+
+import { getOrderStatus, OrderStatusType } from "@/lib/constants/order-status";
 
 interface OrderTimelineProps {
   status: OrderStatusType;
+  paymentMethod?: string; // 🛡️ Dynamically passed down from order query to map timelines exactly
   createdAt?: string;
   updatedAt?: string;
   className?: string;
@@ -18,16 +24,28 @@ interface TimelineStep {
   active: boolean;
 }
 
-export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: OrderTimelineProps) {
+export function OrderTimeline({ status, paymentMethod, createdAt, updatedAt, className = "" }: OrderTimelineProps) {
   
-  // 🛡️ Map order status to timeline steps dynamically based on current flow
+  const isCod = paymentMethod === 'COD' || status === 'COD_REQUESTED' || status === 'CONFIRMED';
+
   const getTimelineSteps = (): TimelineStep[] => {
-    let flowSteps = [...ORDER_TIMELINE_STEPS];
+    let flowSteps = isCod 
+      ? [
+          { status: "COD_REQUESTED", label: "COD Requested" },
+          { status: "CONFIRMED", label: "Order Confirmed" },
+          { status: "SHIPPED", label: "Order Shipped" },
+          { status: "DELIVERED", label: "Order Delivered" },
+        ]
+      : [
+          { status: "PENDING", label: "Order Placed" },
+          { status: "PAID", label: "Payment Confirmed" },
+          { status: "SHIPPED", label: "Order Shipped" },
+          { status: "DELIVERED", label: "Order Delivered" },
+        ];
 
     const refundFlow = ["RETURN_REQUESTED", "REFUND_PROCESSING", "REFUNDED"];
     const replacementFlow = ["REPLACEMENT_REQUESTED", "REPLACEMENT_PROCESSING", "REPLACED"];
 
-    // Append the respective extension flow if the order is in that state
     if (refundFlow.includes(status)) {
       flowSteps = [
         ...flowSteps,
@@ -43,9 +61,8 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
         { status: "REPLACED", label: "Replacement Delivered" }
       ];
     } else if (status === "CANCELLED") {
-      // If cancelled, override timeline to just show Placed -> Cancelled
       flowSteps = [
-        { status: "PENDING", label: "Order Placed" },
+        isCod ? { status: "COD_REQUESTED", label: "COD Requested" } : { status: "PENDING", label: "Order Placed" },
         { status: "CANCELLED", label: "Order Cancelled" }
       ];
     }
@@ -68,7 +85,6 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
   const steps = getTimelineSteps();
   const isCancelled = status === "CANCELLED";
   
-  // Determine if we need to show a terminal/contextual note at the bottom
   const noticeStatuses = [
     "CANCELLED", "RETURN_REQUESTED", "REFUND_PROCESSING", "REFUNDED", 
     "REPLACEMENT_REQUESTED", "REPLACEMENT_PROCESSING", "REPLACED"
@@ -87,9 +103,7 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Timeline Container */}
       <div className="relative">
-        {/* Vertical Line spanning the height of the steps */}
         <div className="absolute left-4 top-0 h-full w-0.5 bg-border" />
         
         {steps.map((step, index) => {
@@ -104,7 +118,6 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
               transition={{ delay: index * 0.1 }}
               className="relative flex items-start gap-4 pb-6 last:pb-0"
             >
-              {/* Timeline Dot (Has bg-card to mask the vertical line behind it) */}
               <div className="relative z-10 flex h-8 w-8 flex-shrink-0 items-center justify-center bg-card">
                 {step.completed ? (
                   <div className={`flex h-8 w-8 items-center justify-center rounded-full ${
@@ -121,8 +134,7 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
                 )}
               </div>
 
-              {/* Step Content */}
-              <div className="flex-1 pt-1.5">
+              <div className="flex-1 pt-1.5 text-left">
                 <div className="flex items-center gap-3">
                   <span className={`font-medium ${
                     step.completed 
@@ -132,7 +144,6 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
                     {step.label}
                   </span>
                   
-                  {/* "In Progress" flashing badge for active intermediate steps */}
                   {step.active && !isCancelled && !["REFUNDED", "REPLACED", "DELIVERED"].includes(status) && (
                     <span className="text-[10px] uppercase tracking-wider font-bold text-primary animate-pulse bg-primary/10 px-2 py-0.5 rounded-sm">
                       In Progress
@@ -145,9 +156,8 @@ export function OrderTimeline({ status, createdAt, updatedAt, className = "" }: 
         })}
       </div>
 
-      {/* Contextual Status Note Box */}
       {showNotice && (
-        <div className={`rounded-lg border p-3 text-sm animate-in fade-in duration-500 ${
+        <div className={`rounded-lg border p-3 text-sm text-left animate-in fade-in duration-500 ${
           status === "CANCELLED" 
             ? "border-destructive/20 bg-destructive/5 text-destructive"
             : "border-primary/20 bg-primary/5 text-primary"

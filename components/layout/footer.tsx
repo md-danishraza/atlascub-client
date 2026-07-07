@@ -15,7 +15,7 @@ import {
   CreditCard,
   Sparkles
 } from "lucide-react";
-import { FaInstagram, FaTwitter, FaYoutube, FaPinterest } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaYoutube, FaPinterest, FaFacebook } from "react-icons/fa";
 import { Logo } from "@/components/shared/logo";
 
 export function Footer() {
@@ -66,7 +66,7 @@ export function Footer() {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 md:mb-16"
         >
           {[
-            { icon: Truck, label: "Free Shipping", sub: "On orders above ₹5000" },
+            { icon: Truck, label: "Free Shipping", sub: "On orders above ₹1299" },
             { icon: Shield, label: "Secure Payment", sub: "100% protected checkout" },
             { icon: RotateCcw, label: "Easy Returns", sub: "7-day return policy" },
             { icon: Sparkles, label: "Premium Quality", sub: "Handcrafted with care" },
@@ -107,10 +107,11 @@ export function Footer() {
               </p>
               <div className="flex gap-2.5">
                 {[
-                  { Icon: FaInstagram, href: "https://instagram.com/atlascub", label: "Instagram" },
-                  { Icon: FaTwitter, href: "https://twitter.com/atlascub", label: "Twitter" },
-                  { Icon: FaYoutube, href: "https://youtube.com/atlascub", label: "YouTube" },
-                  { Icon: FaPinterest, href: "https://pinterest.com/atlascub", label: "Pinterest" },
+                  { Icon: FaInstagram, href: "https://instagram.com/atlas_cub/", label: "Instagram" },
+                  { Icon: FaFacebook, href: "https://www.facebook.com/share/17bg2eDQDG/", label: "FaceBook" },
+                  // { Icon: FaTwitter, href: "https://twitter.com/atlascub", label: "Twitter" },
+                  // { Icon: FaYoutube, href: "https://youtube.com/atlascub", label: "YouTube" },
+                  // { Icon: FaPinterest, href: "https://pinterest.com/atlascub", label: "Pinterest" },
                 ].map((social, idx) => (
                   <Link 
                     key={idx}
@@ -133,7 +134,7 @@ export function Footer() {
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-3.5 w-3.5 text-primary/70" />
-                <span>+91 98765 43210</span>
+                <span>+91 8287627289</span>
               </p>
               <p className="flex items-center gap-2">
                 <Clock className="h-3.5 w-3.5 text-primary/70" />
@@ -176,10 +177,10 @@ export function Footer() {
             <ul className="space-y-3 text-sm font-body">
               {[
                 { name: "About Us", href: "/about" },
-                { name: "Our Story", href: "/about" },
-                { name: "Sustainability", href: "/about" },
-                { name: "Press", href: "/contact" },
-                { name: "Careers", href: "/contact" },
+                // { name: "Our Story", href: "/about" },
+                // { name: "Sustainability", href: "/about" },
+                // { name: "Press", href: "/contact" },
+                // { name: "Careers", href: "/contact" },
               ].map((item, idx) => (
                 <li key={idx}>
                   <Link 

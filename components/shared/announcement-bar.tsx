@@ -19,7 +19,7 @@ const STATIC_ANNOUNCEMENTS: Announcement[] = [
   {
     id: "ann_1",
     overline: "Complimentary",
-    text: "Enjoy complimentary shipping on all orders over ₹4999 across India.",
+    text: "Enjoy complimentary shipping on all orders over 1299 across India.",
     ctaText: "Details",
     ctaHref: "/support",
   },
@@ -35,7 +35,7 @@ const STATIC_ANNOUNCEMENTS: Announcement[] = [
     overline: "Limited Drop",
     text: "Our Summer Solstice French Linen collection is now live.",
     ctaText: "Explore Collection",
-    ctaHref: "/collections",
+    ctaHref: "/collections/all",
   },
 ];
 

@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { getOrderStatus, getStatusIcon, OrderStatusType } from "@/lib/constants/order-status";
+import { getOrderStatus, OrderStatusType, ORDER_STATUS_CONFIG } from "@/lib/constants/order-status";
 
 interface OrderStatusBadgeProps {
-  status: OrderStatusType;
+  status: OrderStatusType | string; // 🛡️ Safely accepts raw API strings to prevent typecast errors
   size?: "sm" | "md" | "lg";
   showIcon?: boolean;
   showLabel?: boolean;
@@ -24,7 +24,7 @@ const iconSizes = {
   lg: "h-4 w-4",
 };
 
-const pulseStatuses: OrderStatusType[] = ["PENDING", "SHIPPED", "RETURN_REQUESTED"];
+const pulseStatuses: OrderStatusType[] = ["PENDING", "COD_REQUESTED", "SHIPPED", "RETURN_REQUESTED"];
 
 export function OrderStatusBadge({
   status,
@@ -32,13 +32,17 @@ export function OrderStatusBadge({
   showIcon = true,
   showLabel = true,
   className = "",
-  pulse = false,
+  pulse,
 }: OrderStatusBadgeProps) {
-  const config = getOrderStatus(status);
-  const Icon = getStatusIcon(status);
+  // 🛡️ Guard: Safeguards against unknown or malformed status strings with a fallback
+  const isKnownStatus = status in ORDER_STATUS_CONFIG;
+  const normalizedStatus = (isKnownStatus ? status : "PENDING") as OrderStatusType;
 
-  // Auto-pulse for active statuses unless explicitly disabled
-  const shouldPulse = pulse !== undefined ? pulse : pulseStatuses.includes(status);
+  const config = getOrderStatus(normalizedStatus);
+  const Icon = config.icon; // Resolved directly from your central mapping configuration
+
+  // Auto-pulse for processing states unless explicitly overridden by prop
+  const shouldPulse = pulse !== undefined ? pulse : pulseStatuses.includes(normalizedStatus);
 
   return (
     <motion.span
@@ -48,8 +52,8 @@ export function OrderStatusBadge({
         scale: 1,
         ...(shouldPulse && {
           boxShadow: [
-            "0 0 0 0 rgba(251, 191, 36, 0.2)",
-            "0 0 0 6px rgba(251, 191, 36, 0)",
+            "0 0 0 0 rgba(155, 44, 44, 0.2)",
+            "0 0 0 6px rgba(155, 44, 44, 0)",
           ],
         }),
       }}
@@ -57,14 +61,14 @@ export function OrderStatusBadge({
         duration: 0.2,
         ...(shouldPulse && {
           boxShadow: {
-            duration: 1.5,
+            duration: 1.8,
             repeat: Infinity,
             ease: "easeInOut",
           },
         }),
       }}
       className={`
-        inline-flex items-center rounded-full border font-medium
+        inline-flex items-center rounded-full border font-medium transition-colors
         ${config.color.badge}
         ${sizeClasses[size]}
         ${className}

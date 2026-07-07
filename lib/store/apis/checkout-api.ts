@@ -117,7 +117,7 @@ export const checkoutApi = api.injectEndpoints({
     // Update order status (admin only)
     updateOrderStatus: builder.mutation<
       OrderResponse,
-      { id: string; status: string } // 🛡️ Simplified, tracking moved to its own endpoint
+      { id: string; status: string; adminNote?: string } // 🛡️ Simplified, tracking moved to its own endpoint
     >({
       query: ({ id, status }) => ({
         url: `/orders/${id}/status`,

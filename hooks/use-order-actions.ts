@@ -23,16 +23,19 @@ export function useOrderActions({ orderId, onSuccess }: UseOrderActionsProps) {
 
   const isUpdating = isUpdatingStatus || isUpdatingTracking || isUpdatingReturn;
 
-  const updateOrderStatus = async (newStatus: string) => {
+  const updateOrderStatus = async (newStatus: string, adminNote?: string) => {
     try {
-      await updateStatus({ id: orderId, status: newStatus }).unwrap();
+      await updateStatus({
+        id: orderId,
+        status: newStatus,
+        adminNote,
+      }).unwrap();
       toast.success(`Order status updated to ${newStatus}`);
       if (onSuccess) onSuccess();
     } catch (error) {
       toast.error("Failed to update order status");
     }
   };
-
   const addTrackingInfo = async (data: {
     trackingNumber?: string;
     awbCode?: string;

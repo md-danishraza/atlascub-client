@@ -2,19 +2,19 @@
 
 export const companyInfo = {
   name: "Atlascub Premium Apparel",
-  legalName: "Atlascub Studio Private Limited",
+  legalName: "Atlascub Studio",
   brandName: "Atlascub",
-  email: "care@contact.atlascub.in",
+  email: "support@atlascub.in",
   supportInbox: "support@atlascub.in",
-  phone: "+91 98765 43210",
-  address: "Ismailpur, PO-Amarnagar, Faridabad, Haryana, India",
+  phone: "+91 8287627289",
+  address: "Ismailpur,Basantpur, Faridabad, Haryana, India",
   pincode: "121013",
   operatingHours: "Mon-Sat, 10:00 AM - 7:00 PM IST",
 };
 
 export const shippingInfo = {
-  freeShippingThreshold: 2499, // Aligned with the Announcement bar threshold
-  shippingCost: 200, // Flat delivery charge below threshold
+  freeShippingThreshold: 1299, // Aligned with the Announcement bar threshold
+  shippingCost: 100, // Flat delivery charge below threshold
   codFee: 100, // Standard cash on delivery processing surcharge
   domesticShippingTime: "3 to 5 business days",
   metroCitiesTime: "2 to 3 business days",

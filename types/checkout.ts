@@ -70,6 +70,8 @@ export interface OrderResponse {
   returnReason?: string;
   returnType?: string;
 
+  adminNote?: string;
+
   createdAt: string;
   updatedAt: string;
 }

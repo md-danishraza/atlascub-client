@@ -38,8 +38,8 @@ export const contactInfo = {
     support: "support@atlascub.in",
   },
   phone: {
-    whatsapp: "+91 98765 43210",
-    support: "+91 98765 43211",
+    whatsapp: "+91 8287627289",
+    support: "+91 8287627289",
   },
   hours: {
     weekdays: "10:00 AM - 7:00 PM IST",
@@ -55,10 +55,15 @@ export const contactInfo = {
   social: [
     {
       name: "Instagram",
-      url: "https://instagram.com/atlascub",
+      url: "https://instagram.com/atlas_cub",
       icon: "Instagram",
     },
-    { name: "Twitter", url: "https://twitter.com/atlascub", icon: "Twitter" },
+    {
+      name: "Facebook",
+      url: "https://www.facebook.com/share/17bg2eDQDG/",
+      icon: "Facebook",
+    },
+    // { name: "Twitter", url: "https://twitter.com/atlascub", icon: "Twitter" },
   ],
 };
 
