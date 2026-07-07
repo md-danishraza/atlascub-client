@@ -16,6 +16,7 @@ import { AuthStatus } from "@/components/debug/token-debug";
 
 import { Providers } from "@/components/providers/global-provider";
 import { Chatbot } from "@/components/rag/chatbot";
+import Script from "next/script";
 
 const fontSans = Poppins({
   subsets: ["latin"],
@@ -129,6 +130,20 @@ export default function RootLayout({
      <ClerkProvider>
      <html lang="en" className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`} suppressHydrationWarning>
        <body className="min-h-screen bg-background font-body antialiased">
+         {/* 🚀 Google Tag Manager (gtag.js) Integration */}
+         <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-D3PY2PX51D"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-D3PY2PX51D');
+            `}
+          </Script>
+
          
          {/* All strictly client-side providers (Redux, Theme, Sync) are injected here */}
          <Providers>
