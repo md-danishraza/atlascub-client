@@ -57,6 +57,18 @@ export const viewport: Viewport = {
     alternates: {
       canonical: "/",
     },
+    robots:{
+      index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+    },
     manifest: "/manifest.webmanifest", // Direct Next.js dynamic routing endpoint
     title: {
       default: "Atlascub | Premium Modern Clothing & Drapes",

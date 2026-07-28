@@ -33,13 +33,15 @@ export default function HomePage() {
       <FloatingBlobs />
        {/* 1. Hero Section with Scroll Parallax */}
        <HeroSection />
-       {/* 6. Category Silhouette Showcase */}
-       <CategoryShowcase />
+       {/* 3. Featured Collections */}
+       <GenderGrid />
        
         {/* 5. discover products */}
         <DiscoverMore/>
-          {/* 3. Featured Collections */}
-          <GenderGrid />
+
+        {/* 6. Category Silhouette Showcase */}
+       <CategoryShowcase />
+          
         {/* 2. Brand Sourcing Values */}
         <BrandValues />
       

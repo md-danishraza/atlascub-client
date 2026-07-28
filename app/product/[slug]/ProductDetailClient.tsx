@@ -23,6 +23,8 @@ import {
 } from "@/lib/store/apis/review-api";
 import { useGetProductsQuery } from "@/lib/store/apis/product-api";
 import Link from "next/link";
+import { TabsContent } from "@/components/ui/tabs";
+import { HtmlContent } from "@/components/ui/html-content";
 
 export default function ProductDetailPage() {
   const { product, isLoading, isError, refetch: refetchProduct } = useProduct();
@@ -173,7 +175,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Tabs Section */}
-        <div className="mt-12">
+        {/* <div className="mt-12">
           <ProductInfoTabs
             details={product.details || product.description || ""}
             sizing={
@@ -184,9 +186,14 @@ export default function ProductDetailPage() {
               "Free shipping on orders over ₹5000. Delivery in 3-5 business days."
             }
           />
-        </div>
-
-        <div className="mb-8">
+        </div> */}
+       
+  {/* ✅ Always render all TabsContent, even if empty */}
+    <div  className="mt-14">
+      <HtmlContent html={product.details || product.description || ""} className="text-muted-foreground leading-relaxed" />
+    </div>
+  
+        <div className="mb-14">
   {!user ? (
     <div className="rounded-xl border border-border bg-muted/20 p-6 text-center">
       <p className="text-muted-foreground">

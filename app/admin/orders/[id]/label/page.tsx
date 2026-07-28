@@ -90,6 +90,8 @@ export default function PrintLabelPage() {
             <p className="text-[11px] font-black leading-tight mb-0.5">Atlascub Studio</p>
             <p className="text-[9px] leading-tight">Ismailpur, PO-Amarnagar</p>
             <p className="text-[9px] leading-tight">Faridabad, Haryana 121013</p>
+            <p className="text-[9px] leading-tight">support@atlascub.in</p>
+            <p className="text-[9px] leading-tight">8287627289</p>
           </div>
           <div className="w-1/2 pl-3">
             <p className="text-[9px] font-bold uppercase tracking-widest text-gray-500 mb-1">Ship To:</p>

@@ -179,7 +179,7 @@ export function OrderSummary({ isCod = false }: OrderSummaryProps) {
               <span className="text-base font-bold text-foreground">Total</span>
               <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                 {IS_TAX_INCLUSIVE 
-                  ? `Includes ₹${tax.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in GST` 
+                  ? `Includes ₹${tax.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in GST.` 
                   : "GST Applied"}
               </p>
             </div>

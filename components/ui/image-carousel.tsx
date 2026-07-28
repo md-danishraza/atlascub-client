@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface ImageCarouselProps {
   images: string[];
@@ -116,46 +116,67 @@ export function ImageCarousel({ images, alt, className = "" }: ImageCarouselProp
         </div>
       )}
 
-      {/* Zoom Dialog */}
+      {/* ✅ FIX: Zoom Dialog - Full Screen & Large */}
       <Dialog open={isZoomed} onOpenChange={setIsZoomed}>
-        <DialogContent className="max-w-5xl border-border bg-background p-0 sm:rounded-xl">
-          <DialogTitle>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] w-full h-full sm:max-w-[90vw] sm:max-h-[90vh] border-border bg-background p-0 sm:rounded-xl overflow-hidden">
+          {/* ✅ Hidden title for accessibility */}
+          <VisuallyHidden>
+            <DialogTitle>Image Viewer - {alt}</DialogTitle>
+          </VisuallyHidden>
 
-          <div className="relative flex items-center justify-center p-4">
+          <div className="relative flex h-full w-full items-center justify-center bg-black/95 p-4">
+            {/* Close Button */}
             <button
               onClick={() => setIsZoomed(false)}
-              className="absolute right-2 top-2 z-10 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
+              className="absolute right-4 top-4 z-10 rounded-full bg-black/60 p-2 text-white transition-all hover:bg-black/80"
+              aria-label="Close zoom"
             >
-              <X className="h-5 w-5" />
+              <X className="h-6 w-6" />
             </button>
-            
-            <div className="relative aspect-square w-full max-w-3xl">
+
+            {/* Main Zoomed Image */}
+            <div className="relative h-full w-full max-w-5xl max-h-[85vh]">
               <Image
                 src={images[zoomedIndex]}
                 alt={`${alt} zoomed`}
                 fill
                 className="object-contain"
+                sizes="90vw"
+                priority
               />
             </div>
-            
+
+            {/* Navigation Arrows in Zoom Mode */}
             {images.length > 1 && (
               <>
                 <button
-                  onClick={() => setZoomedIndex((prev) => (prev - 1 + images.length) % images.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setZoomedIndex((prev) => (prev - 1 + images.length) % images.length);
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white transition-all hover:bg-black/70 hover:scale-105"
+                  aria-label="Previous image"
                 >
-                  <ChevronLeft className="h-6 w-6" />
+                  <ChevronLeft className="h-7 w-7" />
                 </button>
                 <button
-                  onClick={() => setZoomedIndex((prev) => (prev + 1) % images.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setZoomedIndex((prev) => (prev + 1) % images.length);
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white transition-all hover:bg-black/70 hover:scale-105"
+                  aria-label="Next image"
                 >
-                  <ChevronRight className="h-6 w-6" />
+                  <ChevronRight className="h-7 w-7" />
                 </button>
               </>
             )}
+
+            {/* Zoom Counter */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-4 py-1.5 text-sm text-white">
+              {zoomedIndex + 1} / {images.length}
+            </div>
           </div>
-          </DialogTitle>
         </DialogContent>
       </Dialog>
     </div>
